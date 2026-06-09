@@ -133,7 +133,7 @@ def create_app():
     mail.init_app(app)
 
     with app.app_context():
-        db.create_all(checkfirst=True)
+        db.create_all()
         ensure_schema()
 
     return app
