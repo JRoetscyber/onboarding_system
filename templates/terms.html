@@ -1,7 +1,124 @@
 {% extends "base.html" %}
+{% block title %}Terms of Service — JO4 Dev{% endblock %}
 {% block body %}
-<main class="container narrow py-5">
-  <h1>Terms of Service</h1>
-  <p>This placeholder can be replaced with JO4 Dev's full terms. By submitting the onboarding form, clients confirm that the supplied information and uploaded assets may be used to prepare project discovery, proposals, and related onboarding documents.</p>
+<nav class="topbar">
+  <div class="container d-flex align-items-center justify-content-between">
+    <div class="brand-lockup">
+      <img src="{{ url_for('static', filename='img/jo4dev_logo.png') }}" alt="JO4 Dev" onerror="this.style.display='none'">
+      <span>JO4 Dev</span>
+    </div>
+    <a href="{{ url_for('onboard') }}" class="btn btn-sm btn-outline-secondary">Back to Onboarding</a>
+  </div>
+</nav>
+
+<main class="container py-5" style="max-width:780px">
+
+  <h1 class="fw-bold mb-1">Terms of Service</h1>
+  <p class="text-muted mb-5">Last updated: June 2026</p>
+
+  <div class="d-flex flex-column gap-4">
+
+    <section>
+      <h5 class="fw-semibold">1. About JO4 Dev</h5>
+      <p>JO4 Dev is a full-stack web development and digital services studio based in Johannesburg, South Africa. These Terms of Service govern the relationship between JO4 Dev ("we", "us", "our") and any individual or business ("you", "the client") that uses our onboarding system, engages our services, or enters into a project agreement with us.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">2. Onboarding Form &amp; Data Use</h5>
+      <p>By completing and submitting the JO4 Dev onboarding form, you confirm that:</p>
+      <ul>
+        <li>All information you provide is accurate and belongs to you or your organisation.</li>
+        <li>You authorise JO4 Dev to use the submitted information, uploaded logos, brand assets, and files solely to prepare project discovery documents, proposals, and related onboarding materials.</li>
+        <li>Your data is stored securely and will not be shared with third parties except as required to deliver our services (e.g. cloud storage, email delivery).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">3. Services &amp; Project Agreements</h5>
+      <p>Submission of the onboarding form does not constitute a binding contract. A formal project agreement, scope of work, or proposal will be issued separately. Work begins only after both parties have agreed in writing to the scope, timeline, and payment terms.</p>
+      <p>JO4 Dev reserves the right to decline any project at its discretion without obligation to provide a reason.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">4. Payment Terms</h5>
+      <ul>
+        <li>Payment terms are specified in each individual project agreement or invoice.</li>
+        <li>A deposit (typically 50%) is required before project work commences unless otherwise agreed in writing.</li>
+        <li>Final deliverables, including source code, login credentials, and live deployments, are handed over only upon receipt of full payment.</li>
+        <li>Overdue invoices may attract interest at the maximum rate permitted under the National Credit Act (South Africa) and may result in suspension of services.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">5. Intellectual Property</h5>
+      <p>Upon receipt of full and final payment:</p>
+      <ul>
+        <li>All custom design and code created specifically for your project becomes your property.</li>
+        <li>Third-party components, libraries, themes, plugins, and stock assets remain subject to their respective licences.</li>
+        <li>JO4 Dev retains the right to display completed work in its portfolio unless you request otherwise in writing.</li>
+      </ul>
+      <p>Until full payment is received, JO4 Dev retains all intellectual property rights over work produced.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">6. Client Responsibilities</h5>
+      <ul>
+        <li>You are responsible for providing timely feedback, content, and approvals as outlined in the project agreement.</li>
+        <li>Delays caused by late feedback or missing content may affect the agreed timeline and are not the responsibility of JO4 Dev.</li>
+        <li>You are responsible for ensuring that any content, images, or brand assets you supply do not infringe on any third-party intellectual property rights.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">7. Revisions &amp; Scope Changes</h5>
+      <p>Revisions within the agreed scope are included as specified in each project agreement. Requests that fall outside the agreed scope will be treated as change requests and quoted separately. JO4 Dev will notify you before proceeding with any out-of-scope work.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">8. Confidentiality</h5>
+      <p>Both parties agree to keep confidential any non-public information shared during the engagement. JO4 Dev will not disclose your business information, project details, or data to any third party without your written consent, except where required by law.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">9. Limitation of Liability</h5>
+      <p>To the fullest extent permitted by South African law, JO4 Dev's total liability to you for any claim arising from our services is limited to the total amount paid by you for the specific service giving rise to the claim.</p>
+      <p>JO4 Dev is not liable for any indirect, consequential, or incidental damages, including but not limited to loss of revenue, loss of data, or business interruption.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">10. Website Hosting &amp; Maintenance</h5>
+      <p>Where JO4 Dev provides hosting, uptime is subject to third-party infrastructure providers (e.g. cloud servers, Cloudflare). We will take reasonable steps to maintain availability but cannot guarantee 100% uptime. Scheduled maintenance will be communicated in advance where possible.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">11. Termination</h5>
+      <p>Either party may terminate a project engagement with 14 days' written notice. Upon termination:</p>
+      <ul>
+        <li>You are liable for payment of all work completed up to the termination date.</li>
+        <li>JO4 Dev will deliver all completed work assets upon receipt of outstanding payment.</li>
+        <li>Deposits are non-refundable unless JO4 Dev cancels the agreement without cause.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">12. Governing Law</h5>
+      <p>These terms are governed by the laws of the Republic of South Africa. Any disputes will be subject to the jurisdiction of the South Gauteng High Court or the applicable Magistrates' Court, depending on the value of the claim.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">13. Changes to These Terms</h5>
+      <p>JO4 Dev may update these Terms of Service from time to time. The latest version will always be available at this URL. Continued use of our services after an update constitutes acceptance of the revised terms.</p>
+    </section>
+
+    <section>
+      <h5 class="fw-semibold">14. Contact</h5>
+      <p>If you have questions about these terms, please contact us at <a href="mailto:info@jo4.co.za">info@jo4.co.za</a>.</p>
+    </section>
+
+  </div>
+
+  <hr class="my-5">
+  <p class="text-muted small">JO4 Dev &mdash; Johannesburg, South Africa &mdash; <a href="mailto:info@jo4.co.za">info@jo4.co.za</a></p>
+
 </main>
 {% endblock %}
