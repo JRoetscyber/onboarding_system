@@ -4,27 +4,15 @@ services:
   web:
     build: .
     container_name: jo4dev_onboard
-    restart: unless-stopped
+    restart: always
     env_file: .env
     volumes:
       - ./instance:/app/instance
       - ./credentials:/app/credentials
       - ./static/uploads:/app/static/uploads
     networks:
-      - jo4dev_net
-
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: jo4dev_tunnel
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-    networks:
-      - jo4dev_net
-    depends_on:
-      - web
+      - tunnel-net
 
 networks:
-  jo4dev_net:
-    driver: bridge
+  tunnel-net:
+    external: true

@@ -59,13 +59,22 @@ docker compose down
 
 ## Ubuntu VPS with Cloudflare Tunnel
 
+This app joins the shared `tunnel-net` Docker network. The shared `cloudflared` container on the server handles routing — no separate tunnel container is needed here.
+
 1. Install Docker and the Docker Compose plugin on the VPS.
 2. Clone this repo onto the VPS.
-3. Copy `.env.example` to `.env` and fill in all values, including `CLOUDFLARE_TUNNEL_TOKEN`.
+3. Copy `.env.example` to `.env` and fill in all values.
 4. Place `google_service_account.json` in `credentials/`.
-5. In Cloudflare Zero Trust, create a tunnel and copy the tunnel token into `.env`.
-6. Configure the public hostname `https://onboard.jo4dev.co.za` to forward to `http://web:6040`.
-7. Run:
+5. Add the following entry to `/root/.cloudflared/config.yml` **before** the final `http_status:404` line:
+   ```yaml
+   - hostname: onboard.jo4dev.co.za
+     service: http://jo4dev_onboard:6040
+   - hostname: www.onboard.jo4dev.co.za
+     service: http://jo4dev_onboard:6040
+   ```
+6. Restart the shared tunnel: `docker restart cloudflared`
+7. Add two CNAME records in the Cloudflare DNS dashboard pointing to `031f1933-5ab5-4d2c-b0d7-65ed4aafb07f.cfargotunnel.com` (proxied).
+8. Run:
    ```bash
    docker compose up -d --build
    ```
