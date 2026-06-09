@@ -64,7 +64,7 @@ docker compose down
 3. Copy `.env.example` to `.env` and fill in all values, including `CLOUDFLARE_TUNNEL_TOKEN`.
 4. Place `google_service_account.json` in `credentials/`.
 5. In Cloudflare Zero Trust, create a tunnel and copy the tunnel token into `.env`.
-6. Configure the public hostname `https://onboard.jo4dev.co.za` to forward to `http://web:5000`.
+6. Configure the public hostname `https://onboard.jo4dev.co.za` to forward to `http://web:6040`.
 7. Run:
    ```bash
    docker compose up -d --build

@@ -418,7 +418,10 @@ def admin_login():
     if request.method == "POST":
         if request.form.get("password") == current_app.config["ADMIN_PASSWORD"]:
             session["admin_logged_in"] = True
-            return redirect(request.args.get("next") or url_for("admin_dashboard"))
+            next_page = request.args.get("next", "")
+            if next_page and next_page.startswith("/") and not next_page.startswith("//"):
+                return redirect(next_page)
+            return redirect(url_for("admin_dashboard"))
         flash("Invalid password", "danger")
     return render_template("admin/login.html")
 
