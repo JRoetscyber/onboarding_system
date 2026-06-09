@@ -8,7 +8,6 @@ services:
     env_file: .env
     volumes:
       - ./instance:/app/instance
-      - ./credentials:/app/credentials
       - ./static/uploads:/app/static/uploads
     networks:
       - tunnel-net
