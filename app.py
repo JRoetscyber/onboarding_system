@@ -133,7 +133,7 @@ def create_app():
     mail.init_app(app)
 
     with app.app_context():
-        db.create_all()
+        db.create_all(checkfirst=True)
         ensure_schema()
 
     return app
@@ -203,8 +203,6 @@ def save_upload(field_name, multiple=False):
     return saved
 
 
-
-
 def send_to_n8n(submission):
     webhook_url = current_app.config.get("N8N_WEBHOOK_URL")
     if not webhook_url:
@@ -262,7 +260,7 @@ def send_to_n8n(submission):
     }
 
     try:
-        response = requests.post(webhook_url, json=data)
+        response = requests.post(webhook_url, json=data, timeout=10)
         response.raise_for_status()
         current_app.logger.info(f"Successfully sent submission {submission.submission_id} to n8n webhook.")
     except requests.exceptions.RequestException as e:
@@ -346,7 +344,9 @@ def terms():
 
 @app.post("/api/onboard/submit")
 def submit_onboarding():
-    required = ["company_name", "contact_name", "contact_email", "main_goal", "terms"]
+    missing = [f for f in ["company_name", "contact_name", "contact_email", "main_goal", "terms"] if not request.form.get(f)]
+    if missing:
+        return jsonify({"success": False, "error": f"Missing required fields: {', '.join(missing)}"}), 400
 
     submission = Submission(
         submission_id=str(uuid.uuid4()),
@@ -616,4 +616,4 @@ def delete_task(task_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

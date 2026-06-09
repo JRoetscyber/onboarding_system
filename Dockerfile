@@ -16,4 +16,4 @@ RUN mkdir -p /app/instance /app/static/uploads
 
 EXPOSE 6040
 
-CMD ["gunicorn", "--bind", "0.0.0.0:6040", "--workers", "2", "--timeout", "120", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:6040", "--workers", "2", "--timeout", "120", "--preload", "app:app"]
