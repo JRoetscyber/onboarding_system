@@ -1,0 +1,88 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<h1>Agile - {{ submission.company_name }}</h1>
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_client', submission_id=submission.submission_id) }}">Overview</a></li>
+  <li class="nav-item"><a class="nav-link active" href="{{ url_for('admin_agile', submission_id=submission.submission_id) }}">Agile</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_seo', submission_id=submission.submission_id) }}">SEO Audit</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_tasks', submission_id=submission.submission_id) }}">Tasks</a></li>
+</ul>
+
+<form method="post" class="row g-3 mb-4">
+  <div class="col-md-3">
+    <label class="form-label">Methodology</label>
+    <select class="form-select" name="agile_methodology">
+      {% for value in ["scrum","kanban","hybrid"] %}
+        <option value="{{ value }}" {% if submission.agile_methodology == value %}selected{% endif %}>{{ value|title }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3"><label class="form-label">Project owner</label><input class="form-control" name="project_owner" value="{{ submission.project_owner or '' }}"></div>
+  <div class="col-md-3"><label class="form-label">Sprint name</label><input class="form-control" name="sprint_name" value="{{ submission.sprint_name or '' }}" placeholder="Sprint 1"></div>
+  <div class="col-md-3"><label class="form-label">Cadence</label><select class="form-select" name="sprint_cadence"><option>weekly</option><option>two-weekly</option><option>monthly</option><option>continuous</option></select></div>
+  <div class="col-md-3"><label class="form-label">Sprint start</label><input class="form-control" type="date" name="sprint_start" value="{{ submission.sprint_start or '' }}"></div>
+  <div class="col-md-3"><label class="form-label">Sprint end</label><input class="form-control" type="date" name="sprint_end" value="{{ submission.sprint_end or '' }}"></div>
+  <div class="col-md-6"><label class="form-label">Sprint goal</label><textarea class="form-control" name="sprint_goal" rows="2" placeholder="What must this sprint achieve?">{{ submission.sprint_goal or '' }}</textarea></div>
+  <div class="col-12"><button class="btn btn-dark">Save Agile settings</button></div>
+</form>
+
+<div class="stats-grid mb-4">
+  <div><span>Backlog</span><strong>{{ backlog|length }}</strong></div>
+  <div><span>In progress</span><strong>{{ active|length }}</strong></div>
+  <div><span>Done</span><strong>{{ done|length }}</strong></div>
+  <div><span>Blocked</span><strong>{{ blocked|length }}</strong></div>
+</div>
+
+<div class="agile-board">
+  <section>
+    <h2>Current Sprint</h2>
+    <p><strong>{{ submission.sprint_name or 'No sprint named yet' }}</strong></p>
+    <p class="text-muted">{{ submission.sprint_goal or 'Add a sprint goal so the project has a clear focus.' }}</p>
+    <p class="small mb-0">{{ submission.sprint_start or 'No start date' }} to {{ submission.sprint_end or 'No end date' }}</p>
+  </section>
+  <section>
+    <h2>Active Work</h2>
+    {% for task in active %}
+      <div class="agile-item">
+        <strong>{{ task.title }}</strong>
+        <span>{{ task.agile_type|title }} - {{ task.tag }} - {{ task.estimate_hours or 'No estimate' }}</span>
+      </div>
+    {% else %}
+      <p class="text-muted mb-0">No active work yet.</p>
+    {% endfor %}
+  </section>
+  <section>
+    <h2>Blockers</h2>
+    {% for task in blocked %}
+      <div class="agile-item blocked">
+        <strong>{{ task.title }}</strong>
+        <span>{{ task.blocker }}</span>
+      </div>
+    {% else %}
+      <p class="text-muted mb-0">No blockers recorded.</p>
+    {% endfor %}
+  </section>
+</div>
+
+<h2 class="h5 mt-4">Backlog</h2>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead><tr><th>Item</th><th>Type</th><th>Tag</th><th>Sprint</th><th>Estimate</th><th>Due</th><th>Done when</th></tr></thead>
+    <tbody>
+      {% for task in submission.tasks %}
+        <tr>
+          <td>{{ task.title }}</td>
+          <td>{{ task.agile_type|title }}</td>
+          <td>{{ task.tag }}</td>
+          <td>{{ task.sprint or '-' }}</td>
+          <td>{{ task.estimate_hours or '-' }}</td>
+          <td>{{ task.due_date or '-' }}</td>
+          <td class="small">{{ task.acceptance_criteria or '-' }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">No backlog items yet. Add tasks from the Tasks tab.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

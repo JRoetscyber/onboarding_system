@@ -1,0 +1,35 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<h1>SEO Audit - {{ submission.company_name }}</h1>
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_client', submission_id=submission.submission_id) }}">Overview</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_agile', submission_id=submission.submission_id) }}">Agile</a></li>
+  <li class="nav-item"><a class="nav-link active" href="{{ url_for('admin_seo', submission_id=submission.submission_id) }}">SEO Audit</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_tasks', submission_id=submission.submission_id) }}">Tasks</a></li>
+</ul>
+<form method="post">
+  <div class="seo-package-grid mb-4">
+    {% for key, package in seo_packages.items() %}
+      <label class="seo-package {% if submission.seo_package == key %}active{% endif %}">
+        <input type="radio" name="seo_package" value="{{ key }}" {% if submission.seo_package == key %}checked{% endif %}>
+        <strong>{{ package.name }}</strong>
+        <span>{{ package.summary }}</span>
+      </label>
+    {% endfor %}
+  </div>
+  <div class="progress mb-3"><div class="progress-bar" style="width:{{ progress }}%">{{ progress }}%</div></div>
+  <p class="text-muted">Current package: <strong>{{ seo_packages[submission.seo_package or 'basic'].name }}</strong>. Save after changing the package to load that checklist.</p>
+  {% for category in audit_items|map(attribute='category')|unique %}
+    <h2 class="h5 mt-4">{{ category }}</h2>
+    <div class="audit-list">
+      {% for item in audit_items if item.category == category %}
+        <label><input type="checkbox" name="complete" value="{{ item.id }}" {% if item.is_complete %}checked{% endif %}> {{ item.label }}</label>
+      {% endfor %}
+    </div>
+  {% endfor %}
+  <div class="d-flex gap-2 mt-4">
+    <button class="btn btn-dark">Save audit</button>
+    <button type="button" class="btn btn-outline-secondary" disabled>Export PDF</button>
+  </div>
+</form>
+{% endblock %}

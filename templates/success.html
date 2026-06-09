@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="container narrow py-5">
+  <h1>Thanks, {{ submission.company_name }}.</h1>
+  <p class="lead">Your onboarding submission has been received.</p>
+  {% if submission.gdoc_url %}<a class="btn btn-dark" href="{{ submission.gdoc_url }}" target="_blank">Open onboarding brief</a>{% endif %}
+  <div class="timeline mt-4">
+    <div><strong>1. Review</strong><span>JO4 Dev reviews your answers and assets.</span></div>
+    <div><strong>2. Discovery</strong><span>A discovery call is scheduled where needed.</span></div>
+    <div><strong>3. Proposal</strong><span>You receive a scoped proposal and next steps.</span></div>
+  </div>
+</main>
+{% endblock %}

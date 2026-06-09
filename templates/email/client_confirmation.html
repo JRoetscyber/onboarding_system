@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onboarding Confirmed — JO4 Dev</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f6f9;font-family:'Segoe UI',Arial,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f9;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);padding:40px 48px;text-align:center;">
+              <p style="margin:0 0 8px 0;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#64b5f6;font-weight:600;">JO4 DEV</p>
+              <h1 style="margin:0;font-size:28px;color:#ffffff;font-weight:700;line-height:1.2;">
+                You're all set, {{ first_name }}!
+              </h1>
+              <p style="margin:12px 0 0 0;font-size:15px;color:#94a3b8;">Your onboarding has been received.</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px 48px;">
+
+              <p style="margin:0 0 24px 0;font-size:16px;color:#334155;line-height:1.7;">
+                Hi {{ first_name }}, thanks for completing your onboarding for
+                <strong style="color:#0f172a;">{{ submission.company_name }}</strong>.
+                We've got everything we need to get started and will be in touch shortly.
+              </p>
+
+              <!-- Summary card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:32px;">
+                <tr>
+                  <td style="padding:24px 28px;">
+                    <p style="margin:0 0 16px 0;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#64748b;font-weight:700;">Submission Summary</p>
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:6px 0;font-size:14px;color:#64748b;width:140px;">Company</td>
+                        <td style="padding:6px 0;font-size:14px;color:#0f172a;font-weight:600;">{{ submission.company_name }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:14px;color:#64748b;">Services</td>
+                        <td style="padding:6px 0;font-size:14px;color:#0f172a;font-weight:600;">{{ (submission.services or [])|join(', ') or 'Not specified' }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:14px;color:#64748b;">Budget</td>
+                        <td style="padding:6px 0;font-size:14px;color:#0f172a;font-weight:600;">{{ submission.budget or 'Not specified' }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:14px;color:#64748b;">Timeline</td>
+                        <td style="padding:6px 0;font-size:14px;color:#0f172a;font-weight:600;">{{ submission.launch_date or 'Not specified' }}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- What happens next -->
+              <p style="margin:0 0 16px 0;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#64748b;font-weight:700;">What Happens Next</p>
+
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                <tr>
+                  <td valign="top" style="width:36px;padding-top:2px;">
+                    <div style="width:28px;height:28px;background:#dbeafe;border-radius:50%;text-align:center;line-height:28px;font-size:13px;font-weight:700;color:#1d4ed8;">1</div>
+                  </td>
+                  <td style="padding:0 0 20px 12px;font-size:15px;color:#334155;line-height:1.6;">
+                    <strong style="color:#0f172a;">We review your submission</strong><br />
+                    Our team goes through every detail of your onboarding brief.
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top" style="width:36px;padding-top:2px;">
+                    <div style="width:28px;height:28px;background:#dbeafe;border-radius:50%;text-align:center;line-height:28px;font-size:13px;font-weight:700;color:#1d4ed8;">2</div>
+                  </td>
+                  <td style="padding:0 0 20px 12px;font-size:15px;color:#334155;line-height:1.6;">
+                    <strong style="color:#0f172a;">Discovery call (if needed)</strong><br />
+                    We may reach out to clarify a few things before putting together your proposal.
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top" style="width:36px;padding-top:2px;">
+                    <div style="width:28px;height:28px;background:#dbeafe;border-radius:50%;text-align:center;line-height:28px;font-size:13px;font-weight:700;color:#1d4ed8;">3</div>
+                  </td>
+                  <td style="padding:0 0 0 12px;font-size:15px;color:#334155;line-height:1.6;">
+                    <strong style="color:#0f172a;">You receive your proposal</strong><br />
+                    A detailed scope of work, timeline, and pricing — tailored to your goals.
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;font-size:15px;color:#334155;line-height:1.7;">
+                Any questions? Just reply to this email — we're happy to help.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:28px 48px;text-align:center;">
+              <p style="margin:0 0 4px 0;font-size:13px;font-weight:700;color:#0f172a;letter-spacing:1px;">JO4 DEV</p>
+              <p style="margin:0;font-size:12px;color:#94a3b8;">Building digital experiences that grow your business.</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

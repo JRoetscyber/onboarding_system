@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Client Onboarding - JO4 Dev{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="container d-flex align-items-center justify-content-between">
+    <div class="brand-lockup">
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="JO4 Dev" onerror="this.style.display='none'">
+      <span>JO4 Dev Client Onboarding</span>
+    </div>
+    <a class="btn btn-sm btn-outline-dark" href="{{ url_for('admin_login') }}">Admin</a>
+  </div>
+</header>
+
+<main class="container form-shell">
+  <div class="progress-sticky">
+    <div class="d-flex justify-content-between small fw-semibold mb-2">
+      <span id="stepLabel">Step 1 of 7</span>
+      <span id="progressText">About your business</span>
+    </div>
+    <div class="progress" role="progressbar" aria-label="Form progress">
+      <div id="progressBar" class="progress-bar" style="width:14%"></div>
+    </div>
+  </div>
+
+  <form id="onboardingForm" class="needs-validation" novalidate enctype="multipart/form-data">
+    <section class="form-step active" data-title="About your business">
+      <h1>About your business</h1>
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Company name</label><input class="form-control" name="company_name" required></div>
+        <div class="col-md-6"><label class="form-label">Industry</label><select class="form-select" name="industry"><option>E-commerce</option><option>SaaS/Tech</option><option>Healthcare</option><option>Finance</option><option>Hospitality</option><option>Education</option><option>Real estate</option><option>Retail</option><option>Non-profit</option><option>Other</option></select><div class="form-text">Choose the closest match. If none fits perfectly, "Other" is completely fine.</div></div>
+        <div class="col-md-6"><label class="form-label">Your full name</label><input class="form-control" name="contact_name" required></div>
+        <div class="col-md-6"><label class="form-label">Job title</label><input class="form-control" name="job_title"><div class="form-text">Optional. You can leave this blank if titles are not used in your business.</div></div>
+        <div class="col-md-6"><label class="form-label">Email address</label><input class="form-control" type="email" name="contact_email" required></div>
+        <div class="col-md-6"><label class="form-label">Phone number</label><input class="form-control" name="phone"><div class="form-text">Optional. Add the best number if you prefer calls or WhatsApp.</div></div>
+        <div class="col-md-6"><label class="form-label">Physical address / city</label><input class="form-control" name="address"><div class="form-text">Optional. A city is enough if a full address is not relevant.</div></div>
+        <div class="col-md-6"><label class="form-label">Existing website URL</label><input class="form-control" type="url" name="existing_url"><div class="form-text">Optional. If you do not have a website yet, leave this blank.</div></div>
+        <div class="col-md-6"><label class="form-label">How did you hear about JO4 Dev?</label><select class="form-select" name="referral_source"><option>Google</option><option>Referral</option><option>Social media</option><option>LinkedIn</option><option>Other</option></select><div class="form-text">This only helps us understand where new enquiries come from.</div></div>
+      </div>
+    </section>
+
+    <section class="form-step" data-title="Upload brand assets">
+      <h1>Upload brand assets</h1>
+      <div class="row g-3">
+        <div class="col-md-3"><label class="form-label">Primary colour</label><input class="form-control form-control-color" type="color" name="primary_colour" value="#111111"><div class="form-text">Optional. Pick your main brand colour if you know it.</div></div>
+        <div class="col-md-3"><label class="form-label">Secondary colour</label><input class="form-control form-control-color" type="color" name="secondary_colour" value="#0d6efd"><div class="form-text">Optional. A second colour helps with buttons and highlights.</div></div>
+        <div class="col-md-6"><label class="form-label">Font preferences</label><input class="form-control" name="font_preferences"><div class="form-text">Optional. If you do not know fonts, leave this blank and we will recommend suitable options.</div></div>
+      </div>
+    </section>
+
+    <section class="form-step" data-title="Project goals & scope">
+      <h1>Project goals & scope</h1>
+      <label class="form-label">What services do you need?</label>
+      <div class="form-text mb-2">Select everything that sounds relevant. If you are unsure, choose the closest options and we will help narrow it down.</div>
+      <div class="check-grid">{% for item in ["New website from scratch","Website redesign","SEO (Search Engine Optimisation)","E-commerce / online store","Web application / portal","Content writing","Google Ads / paid media","Social media management","Email marketing","Website maintenance & hosting","Analytics & reporting"] %}<label><input type="checkbox" name="services" value="{{ item }}"> {{ item }}</label>{% endfor %}</div>
+      <div class="mt-3"><label class="form-label">Main goal of this project</label><textarea class="form-control" name="main_goal" required></textarea><div class="form-text">Write this in your own words. For example: get more enquiries, sell online, look more professional, or make the website easier to use.</div></div>
+      <div class="row g-3 mt-1">
+        <div class="col-md-6"><label class="form-label">Target audience</label><textarea class="form-control" name="target_audience"></textarea><div class="form-text">Optional. Tell us who you serve: age, location, needs, problems, or the type of customer you want more of.</div></div>
+        <div class="col-md-6"><label class="form-label">Top 3 competitors</label><textarea class="form-control" name="competitors"></textarea><div class="form-text">Optional. Add names or website links if you know them. It is okay to leave this blank.</div></div>
+        <div class="col-md-6"><label class="form-label">What do you like about competitor sites?</label><textarea class="form-control" name="likes_competitors"></textarea><div class="form-text">Optional. This can be design, wording, prices, layout, or anything that stood out.</div></div>
+        <div class="col-md-6"><label class="form-label">What do you want to do differently?</label><textarea class="form-control" name="dislikes_competitors"></textarea><div class="form-text">Optional. Share what you want to avoid or improve. Simple notes are enough.</div></div>
+      </div>
+    </section>
+
+    <section class="form-step" data-title="Website & content discovery">
+      <h1>Website & content discovery</h1>
+      <div class="row g-3">
+        <div class="col-md-4"><label class="form-label">Existing content?</label><select class="form-select" name="has_content"><option>Yes</option><option>Partially</option><option>No</option></select></div>
+        <div class="col-md-4"><label class="form-label">Estimated pages</label><select class="form-select" name="page_count"><option>1-3</option><option>4-7</option><option>8-15</option><option>15+</option><option>Not sure</option></select><div class="form-text">A page is one main section of a website, like Home, About, Services, or Contact.</div></div>
+        <div class="col-md-4"><label class="form-label">Need a blog?</label><select class="form-select" name="needs_blog"><option>Yes</option><option>No</option><option>Maybe</option></select><div class="form-text">A blog/news area is useful for articles, updates, case studies, and SEO content.</div></div>
+      </div>
+      <label class="form-label mt-3">Pages needed</label>
+      <div class="form-text mb-2">Choose the pages you already know you need. "Other" or no selection is fine if you are unsure.</div>
+      <div class="check-grid">{% for item in ["Home","About","Services","Portfolio/Work","Blog","Contact","FAQ","Pricing","E-commerce store","Login/Portal","Other"] %}<label><input type="checkbox" name="pages_needed" value="{{ item }}"> {{ item }}</label>{% endfor %}</div>
+      <div class="row g-3 mt-1">
+        <div class="col-md-4"><label class="form-label">Sell online?</label><select class="form-select" name="sells_online" id="sellsOnline"><option>Products</option><option>Services</option><option>Both</option><option>Neither</option></select></div>
+        <div class="col-md-4"><label class="form-label">Approx products</label><input class="form-control" type="number" min="0" name="product_count"><div class="form-text">Optional. Only add this if you plan to sell products online.</div></div>
+        <div class="col-md-4"><label class="form-label">Multilingual site?</label><select class="form-select" name="multilingual"><option>Yes</option><option>No</option><option>Maybe</option></select><div class="form-text">This means the website is available in more than one language.</div></div>
+      </div>
+      <label class="form-label mt-3">Languages</label>
+      <div class="form-text mb-2">Optional. Select the languages your customers need, if any.</div>
+      <div class="check-grid compact">{% for item in ["English","Afrikaans","Zulu","Xhosa","Other"] %}<label><input type="checkbox" name="languages" value="{{ item }}"> {{ item }}</label>{% endfor %}</div>
+    </section>
+
+    <section class="form-step" data-title="SEO & marketing">
+      <h1>SEO & marketing</h1>
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">SEO history</label><select class="form-select" name="seo_history"><option>Yes - currently active</option><option>Yes - stopped</option><option>No</option><option>Not sure</option></select><div class="form-text">SEO means improving your website so it can show up better on Google.</div></div>
+        <div class="col-md-6"><label class="form-label">Paid advertising</label><select class="form-select" name="paid_ads"><option>Google Ads</option><option>Meta Ads</option><option>Both</option><option>None</option></select><div class="form-text">This means ads you pay for on Google, Facebook, Instagram, or similar platforms.</div></div>
+        <div class="col-12"><label class="form-label">Keywords or phrases</label><textarea class="form-control" name="target_keywords"></textarea><div class="form-text">Optional. These are words people might type into Google to find your business, such as "plumber in Johannesburg". Leave blank if you are not sure.</div></div>
+        <div class="col-md-6"><label class="form-label">Google Business Profile</label><select class="form-select" name="google_business"><option>Yes - verified</option><option>Yes - unverified</option><option>No</option><option>Don't know</option></select><div class="form-text">This is the Google listing that appears with your business name, map location, reviews, and contact details.</div></div>
+        <div class="col-md-6"><label class="form-label">Analytics or Search Console</label><select class="form-select" name="analytics_setup"><option>Yes - both</option><option>Yes - one only</option><option>No</option><option>Don't know</option></select><div class="form-text">These are Google tools that show website visits, search performance, and technical issues. "Don't know" is perfectly fine.</div></div>
+      </div>
+      <label class="form-label mt-3">Active social platforms</label>
+      <div class="form-text mb-2">Optional. Select the platforms your business currently uses.</div>
+      <div class="check-grid compact">{% for item in ["Facebook","Instagram","LinkedIn","TikTok","X/Twitter","YouTube","Pinterest","None"] %}<label><input type="checkbox" name="social_platforms" value="{{ item }}"> {{ item }}</label>{% endfor %}</div>
+    </section>
+
+    <section class="form-step" data-title="Timeline & budget">
+      <h1>Timeline & budget</h1>
+      <div class="row g-3">
+        <div class="col-md-4"><label class="form-label">Completion date</label><input class="form-control" type="date" name="launch_date"><div class="form-text">Optional. Leave blank if there is no fixed date yet.</div></div>
+        <div class="col-md-4"><label class="form-label">Urgency</label><select class="form-select" name="deadline_urgency"><option>Flexible</option><option>Specific deadline</option><option>ASAP</option></select><div class="form-text">This helps us understand whether timing affects the plan.</div></div>
+        <div class="col-md-4"><label class="form-label">Payment preference</label><select class="form-select" name="payment_preference"><option>Once-off</option><option>Monthly retainer</option><option>Milestone-based</option><option>Open to discussion</option></select><div class="form-text">Choose what feels easiest for your business. We can discuss options later.</div></div>
+        <div class="col-md-6"><label class="form-label">Budget range</label><select class="form-select" name="budget"><option>Under R10,000</option><option>R10,000 - R25,000</option><option>R25,000 - R50,000</option><option>R50,000 - R100,000</option><option>R100,000 - R250,000</option><option>R250,000+</option><option>Prefer not to say / open to discussion</option></select><div class="form-text">This is used to recommend a realistic scope. It is not a final quote.</div></div>
+        <div class="col-md-6"><label class="form-label">Ongoing maintenance budget?</label><select class="form-select" name="maintenance_budget"><option>Yes</option><option>No</option><option>Discuss later</option></select></div>
+      </div>
+    </section>
+
+    <section class="form-step" data-title="Final details">
+      <h1>Final details</h1>
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Involvement level</label><select class="form-select" name="involvement_level"><option>Very involved - weekly check-ins</option><option>Moderately involved - milestone updates</option><option>Hands-off - trust the team</option></select><div class="form-text">This tells us how often you would like updates during the project.</div></div>
+        <div class="col-md-3"><label class="form-label">Main contact name</label><input class="form-control" name="main_contact_name"><div class="form-text">Optional. Leave blank if it is the same person from Step 1.</div></div>
+        <div class="col-md-3"><label class="form-label">Main contact email</label><input class="form-control" type="email" name="main_contact_email"><div class="form-text">Optional. Leave blank if it is the same email from Step 1.</div></div>
+        <div class="col-12"><label class="form-label">Technical requirements or integrations</label><textarea class="form-control" name="integrations"></textarea><div class="form-text">Optional. Examples include online payments, booking forms, WhatsApp, a CRM, memberships, logins, or stock systems. If you are not sure, leave this blank.</div></div>
+        <div class="col-12"><label class="form-label">Anything else?</label><textarea class="form-control" name="other_notes"></textarea><div class="form-text">Optional. Add any extra context, concerns, ideas, or questions.</div></div>
+        <div class="col-md-6"><label class="form-label">Digital presence today</label><div class="rating">{% for n in [1,2,3,4,5] %}<label><input type="radio" name="digital_presence_rating" value="{{ n }}"> {{ n }}</label>{% endfor %}</div><div class="form-text">Optional. 1 means very little online presence, 5 means strong online presence.</div></div>
+        <div class="col-12"><label class="form-check"><input class="form-check-input" type="checkbox" name="terms" value="1" required> <span class="form-check-label">I confirm the information above is accurate and I agree to JO4 Dev's <a href="{{ url_for('terms') }}" target="_blank">terms of service</a>.</span></label></div>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-outline-secondary" id="prevBtn">Back</button>
+      <button type="button" class="btn btn-dark" id="nextBtn">Next</button>
+      <button type="submit" class="btn btn-dark d-none" id="submitBtn"><span class="spinner-border spinner-border-sm d-none" id="submitSpinner"></span> Submit onboarding</button>
+    </div>
+  </form>
+</main>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/form.js') }}"></script>{% endblock %}

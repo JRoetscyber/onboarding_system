@@ -1,0 +1,55 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<h1>Tasks - {{ submission.company_name }}</h1>
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_client', submission_id=submission.submission_id) }}">Overview</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_agile', submission_id=submission.submission_id) }}">Agile</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_seo', submission_id=submission.submission_id) }}">SEO Audit</a></li>
+  <li class="nav-item"><a class="nav-link active" href="{{ url_for('admin_tasks', submission_id=submission.submission_id) }}">Tasks</a></li>
+</ul>
+<form method="post" class="row g-2 mb-4">
+  <div class="col-md-4"><label class="form-label">Task</label><input class="form-control" name="title" placeholder="Call client, prepare proposal, update SEO report..." required></div>
+  <div class="col-md-2"><label class="form-label">Agile type</label><select class="form-select" name="agile_type"><option>story</option><option>task</option><option>bug</option><option>spike</option><option>change</option></select></div>
+  <div class="col-md-2"><label class="form-label">Tag</label><select class="form-select" name="tag"><option>SEO</option><option>Sales</option><option>Design</option><option>Dev</option><option>Content</option><option>Admin</option></select></div>
+  <div class="col-md-2"><label class="form-label">Priority</label><select class="form-select" name="priority"><option>normal</option><option>high</option><option>low</option></select></div>
+  <div class="col-md-2"><label class="form-label">Estimate</label><input class="form-control" name="estimate_hours" placeholder="2h"></div>
+  <div class="col-md-3"><label class="form-label">Sprint</label><input class="form-control" name="sprint" value="{{ submission.sprint_name or '' }}" placeholder="Sprint 1"></div>
+  <div class="col-md-3"><label class="form-label">Due date</label><input class="form-control" type="date" name="due_date"></div>
+  <div class="col-md-3"><label class="form-label">Reminder date</label><input class="form-control" type="date" name="reminder_date"></div>
+  <div class="col-md-3"><label class="form-label">Reminder note</label><input class="form-control" name="reminder_note" placeholder="Remind me today..."></div>
+  <div class="col-md-6"><label class="form-label">Acceptance criteria</label><textarea class="form-control" name="acceptance_criteria" rows="2" placeholder="What must be true before this is done?"></textarea></div>
+  <div class="col-md-4"><label class="form-label">Blocker</label><textarea class="form-control" name="blocker" rows="2" placeholder="What is stopping progress? Leave blank if none."></textarea></div>
+  <div class="col-md-2 d-flex align-items-end"><button class="btn btn-dark w-100">Add</button></div>
+  <div class="col-12"><label class="form-label">Task details</label><textarea class="form-control" name="description" rows="2" placeholder="Optional notes, links, decisions, or what must be done before moving this task to done."></textarea></div>
+</form>
+<div class="kanban" data-update-url-prefix="/admin/task/">
+  {% for col, name in [(0, "To do"), (1, "In progress"), (2, "Done")] %}
+    <section class="kanban-col" data-column="{{ col }}">
+      <h2>{{ name }}</h2>
+      <div class="task-list">
+        {% for task in submission.tasks if task.column == col %}
+          <article class="task-card" data-task-id="{{ task.id }}">
+            <span>{{ task.agile_type|title }} - {{ task.tag }}</span>
+            <span class="task-priority {{ task.priority }}">{{ task.priority|title }}</span>
+            <p>{{ task.title }}</p>
+            {% if task.sprint or task.estimate_hours %}<small>Sprint: {{ task.sprint or '-' }} | Estimate: {{ task.estimate_hours or '-' }}</small>{% endif %}
+            {% if task.description %}<small>{{ task.description }}</small>{% endif %}
+            {% if task.acceptance_criteria %}<small><strong>Done when:</strong> {{ task.acceptance_criteria }}</small>{% endif %}
+            {% if task.blocker %}<div class="reminder-note"><strong>Blocker:</strong> {{ task.blocker }}</div>{% endif %}
+            <div class="task-meta">
+              {% if task.due_date %}<em>Due {{ task.due_date }}</em>{% endif %}
+              {% if task.reminder_date %}<em>Reminder {{ task.reminder_date }}</em>{% endif %}
+            </div>
+            {% if task.reminder_note %}<div class="reminder-note">{{ task.reminder_note }}</div>{% endif %}
+            <form method="post" action="{{ url_for('delete_task', task_id=task.id) }}"><button class="btn btn-sm btn-link text-danger p-0">Delete</button></form>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<script src="{{ url_for('static', filename='js/tasks.js') }}"></script>
+{% endblock %}

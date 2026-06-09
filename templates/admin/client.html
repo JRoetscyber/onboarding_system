@@ -1,0 +1,48 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div><h1>{{ submission.company_name }}</h1><p class="text-muted">{{ submission.contact_name }} - {{ submission.contact_email }}</p></div>
+  <div class="d-flex gap-2">
+    {% if submission.gdrive_folder_url %}<a class="btn btn-outline-dark" href="{{ submission.gdrive_folder_url }}" target="_blank">Drive folder</a>{% endif %}
+    {% if submission.gdoc_url %}<a class="btn btn-dark" href="{{ submission.gdoc_url }}" target="_blank">Google Doc</a>{% endif %}
+  </div>
+</div>
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item"><a class="nav-link active" href="{{ url_for('admin_client', submission_id=submission.submission_id) }}">Overview</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_agile', submission_id=submission.submission_id) }}">Agile</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_seo', submission_id=submission.submission_id) }}">SEO Audit</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_tasks', submission_id=submission.submission_id) }}">Tasks</a></li>
+</ul>
+<form method="post" class="row g-3 mb-4">
+  <div class="col-md-3"><label class="form-label">Pipeline status</label><select class="form-select" name="status">{% for value in ["new","reviewed","proposal_sent","active","completed","on_hold"] %}<option value="{{ value }}" {% if submission.status == value %}selected{% endif %}>{{ value|replace('_',' ')|title }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><label class="form-label">Priority</label><select class="form-select" name="priority">{% for value in ["low","normal","high"] %}<option value="{{ value }}" {% if submission.priority == value %}selected{% endif %}>{{ value|title }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><label class="form-label">Deal value</label><input class="form-control" name="deal_value" value="{{ submission.deal_value or '' }}" placeholder="R25,000"></div>
+  <div class="col-md-2"><label class="form-label">Last contacted</label><input class="form-control" type="date" name="last_contacted" value="{{ submission.last_contacted or '' }}"></div>
+  <div class="col-md-2"><label class="form-label">Next follow-up</label><input class="form-control" type="date" name="next_follow_up" value="{{ submission.next_follow_up or '' }}"></div>
+  <div class="col-md-4"><label class="form-label">Project owner</label><input class="form-control" name="project_owner" value="{{ submission.project_owner or '' }}" placeholder="Who owns delivery?"></div>
+  <div class="col-12"><label class="form-label">Internal CRM notes</label><textarea class="form-control" name="admin_notes" rows="3">{{ submission.admin_notes or '' }}</textarea></div>
+  <div class="col-12"><button class="btn btn-dark">Save</button></div>
+</form>
+<div class="detail-grid">
+  {% for label, value in [
+    ("Priority", submission.priority), ("Deal value", submission.deal_value), ("Last contacted", submission.last_contacted),
+    ("Next follow-up", submission.next_follow_up), ("Project owner", submission.project_owner),
+    ("Agile method", submission.agile_methodology|title), ("Current sprint", submission.sprint_name),
+    ("SEO package", submission.seo_package|title),
+    ("Industry", submission.industry), ("Phone", submission.phone), ("Address", submission.address),
+    ("Existing URL", submission.existing_url), ("Referral", submission.referral_source),
+    ("Brand colours", ((submission.primary_colour or '-') ~ ' / ' ~ (submission.secondary_colour or '-'))),
+    ("Font preferences", submission.font_preferences),
+    ("Services", (submission.services or [])|join(', ')), ("Main goal", submission.main_goal),
+    ("Target audience", submission.target_audience), ("Competitors", submission.competitors),
+    ("Pages needed", (submission.pages_needed or [])|join(', ')), ("Content", submission.has_content),
+    ("SEO history", submission.seo_history), ("Keywords", submission.target_keywords),
+    ("Budget", submission.budget), ("Launch date", submission.launch_date),
+    ("Payment", submission.payment_preference), ("Maintenance", submission.maintenance_budget),
+    ("Involvement", submission.involvement_level), ("Integrations", submission.integrations),
+    ("Other notes", submission.other_notes)
+  ] %}
+    <div><span>{{ label }}</span><p>{{ value or '-' }}</p></div>
+  {% endfor %}
+</div>
+{% endblock %}

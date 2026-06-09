@@ -1,0 +1,83 @@
+{% extends "admin/layout.html" %}
+{% block title %}Admin Dashboard - JO4 Dev{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>CRM Dashboard</h1>
+    <p class="text-muted mb-0">Leads, client follow-ups, today&apos;s work, and project pipeline.</p>
+  </div>
+  <a class="btn btn-dark" href="{{ url_for('onboard') }}">Open intake form</a>
+</div>
+<div class="stats-grid">
+  <div><span>Total clients</span><strong>{{ stats.total }}</strong></div>
+  <div><span>New leads</span><strong>{{ stats.new }}</strong></div>
+  <div><span>Active pipeline</span><strong>{{ stats.in_progress }}</strong></div>
+  <div><span>High priority</span><strong>{{ stats.hot }}</strong></div>
+  <div><span>Due today</span><strong>{{ stats.due_today }}</strong></div>
+  <div><span>Overdue</span><strong>{{ stats.overdue }}</strong></div>
+  <div><span>Reminders</span><strong>{{ stats.reminders }}</strong></div>
+  <div><span>Completed</span><strong>{{ stats.completed }}</strong></div>
+</div>
+
+<div class="crm-grid my-4">
+  <section class="crm-panel danger">
+    <h2>Overdue</h2>
+    {% for task in overdue %}
+      <a class="crm-task" href="{{ url_for('admin_tasks', submission_id=task.submission.submission_id) }}">
+        <strong>{{ task.title }}</strong>
+        <span>{{ task.submission.company_name }} - due {{ task.due_date }}</span>
+      </a>
+    {% else %}
+      <p class="text-muted mb-0">No overdue tasks.</p>
+    {% endfor %}
+  </section>
+  <section class="crm-panel">
+    <h2>Needs to be done today</h2>
+    {% for task in due_today %}
+      <a class="crm-task" href="{{ url_for('admin_tasks', submission_id=task.submission.submission_id) }}">
+        <strong>{{ task.title }}</strong>
+        <span>{{ task.submission.company_name }} - {{ task.tag }} - {{ task.priority|title }}</span>
+      </a>
+    {% else %}
+      <p class="text-muted mb-0">No tasks due today.</p>
+    {% endfor %}
+  </section>
+  <section class="crm-panel warning">
+    <h2>Reminders</h2>
+    {% for task in reminders %}
+      <a class="crm-task" href="{{ url_for('admin_tasks', submission_id=task.submission.submission_id) }}">
+        <strong>{{ task.reminder_note or task.title }}</strong>
+        <span>{{ task.submission.company_name }} - reminder {{ task.reminder_date }}</span>
+      </a>
+    {% else %}
+      <p class="text-muted mb-0">No reminders for now.</p>
+    {% endfor %}
+  </section>
+</div>
+<form class="row g-2 my-4">
+  <div class="col-md-3"><select class="form-select" name="status"><option value="">All statuses</option>{% for value in ["new","reviewed","proposal_sent","active","completed","on_hold"] %}<option value="{{ value }}" {% if request.args.get('status') == value %}selected{% endif %}>{{ value|replace('_',' ')|title }}</option>{% endfor %}</select></div>
+  <div class="col-md-4"><input class="form-control" name="service" value="{{ request.args.get('service','') }}" placeholder="Filter by exact service"></div>
+  <div class="col-md-2"><button class="btn btn-outline-dark w-100">Filter</button></div>
+</form>
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead><tr><th>Company</th><th>Contact</th><th>Priority</th><th>Follow-up</th><th>Services</th><th>Budget</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for item in submissions %}
+      <tr>
+        <td><a href="{{ url_for('admin_client', submission_id=item.submission_id) }}">{{ item.company_name }}</a></td>
+        <td>{{ item.contact_name }}<br><span class="text-muted small">{{ item.contact_email }}</span></td>
+        <td><span class="badge {% if item.priority == 'high' %}text-bg-danger{% elif item.priority == 'low' %}text-bg-light{% else %}text-bg-secondary{% endif %}">{{ (item.priority or 'normal')|title }}</span></td>
+        <td>{{ item.next_follow_up or '-' }}</td>
+        <td class="small">{{ (item.services or [])|join(', ') }}</td>
+        <td>{{ item.budget or '-' }}</td>
+        <td><span class="badge text-bg-secondary">{{ item.status|replace('_',' ') }}</span></td>
+        <td><a class="btn btn-sm btn-outline-dark" href="{{ url_for('admin_client', submission_id=item.submission_id) }}">View</a></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="8" class="text-center text-muted py-4">No submissions yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
