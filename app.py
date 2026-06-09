@@ -603,6 +603,19 @@ def update_task(task_id):
     return jsonify({"success": True})
 
 
+@app.post("/admin/client/<submission_id>/delete")
+def delete_client(submission_id):
+    gate = require_admin()
+    if gate:
+        abort(403)
+    submission = Submission.query.filter_by(submission_id=submission_id).first_or_404()
+    company_name = submission.company_name
+    db.session.delete(submission)
+    db.session.commit()
+    flash(f"{company_name} has been deleted.", "success")
+    return redirect(url_for("admin_dashboard"))
+
+
 @app.post("/admin/task/<int:task_id>/delete")
 def delete_task(task_id):
     gate = require_admin()

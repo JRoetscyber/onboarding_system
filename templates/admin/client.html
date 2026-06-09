@@ -5,7 +5,29 @@
   <div class="d-flex gap-2">
     {% if submission.gdrive_folder_url %}<a class="btn btn-outline-dark" href="{{ submission.gdrive_folder_url }}" target="_blank">Drive folder</a>{% endif %}
     {% if submission.gdoc_url %}<a class="btn btn-dark" href="{{ submission.gdoc_url }}" target="_blank">Google Doc</a>{% endif %}
+    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete client</button>
   </div>
+
+<!-- Delete confirmation modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Delete {{ submission.company_name }}?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-muted">
+        This will permanently delete the client, all their tasks, and their SEO audit. This cannot be undone.
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form method="post" action="{{ url_for('delete_client', submission_id=submission.submission_id) }}">
+          <button type="submit" class="btn btn-danger">Yes, delete permanently</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item"><a class="nav-link active" href="{{ url_for('admin_client', submission_id=submission.submission_id) }}">Overview</a></li>
